@@ -1,0 +1,108 @@
+Tudo em inglês (Software, comnetário, documentação e etc), exceto o front-end que é em português
+Comentar conforme cria as funções
+Duolingo
+Utiliza o git
+Usar o email da enterscience para subir as coisas no git
+Projeto de estudo Steam:
+    Desenvolver um software semelhante a steam
+    Ter catálogo de jogos (API - https://steamcommunity.com/dev?l=portuguese)
+    Pagina do jogo, conter banner, logos e etc
+    Formulário de itenção do jogo para cada jogo
+
+Tecnologias:
+    Vuejs
+    Bootstrap
+
+Fazer:
+    Mascara
+    Validação
+
+Banco de dados:
+    Local Storage
+    Laravel
+
+Biblioteca:
+    https://vuelidate-next.netlify.app/#installation
+
+    roadmap: https://github.com/elsewhencode/project-guidelines/blob/master/README-pt-BR.md
+
+
+Parei em    https://pt.vuejs.org/guide/essentials/application.html
+            https://pt.vuejs.org/tutorial/#step-7
+---------------------------
+Vue:
+    É uma abstração de JavaScript para construção de interfaces de utilizador. Ela constrói sobre a HTML, CSS e JavaScript padrão, e fornece um modelo de programação declarativa baseada em componente que ajuda-te a programar interfaces de utilizador eficientemente.
+
+Funcionalidades Principais
+    Interpretação Declarativa: a Vue estende a HTML padrão com uma sintaxe de modelo de marcação que permite-nos descrever de maneira declarativa o resultado de HTML baseado no estado de JavaScript.
+
+    Reatividade: a Vue rastreia automaticamente as mudanças de estado de JavaScript e atualiza eficientemente o DOM quando as mudanças acontecem.
+
+Vue está desenhada para ser flexível e adotável incrementalmente, podendo ser utilizada nas diferentes maneiras:
+    Otimizando o HTML estático sem uma etapa de construção
+    Embutindo como Componentes de Web em qualquer página
+    Aplicação de Página Única (SPA, sigla em Inglês)
+    Interpretação no Lado do Servidor (SSR, sigla em Inglês)
+    Geração de Sítio Estático (SSG, sigla em Inglês)
+    Mirando aplicações de Área de trabalho, Móvel, WebGL, e até mesmo o Terminal
+
+Componentes
+    Single-File Component (SFC): bloco de código autossuficiente reutilizável que encapsula em um conjunto a HTML, CSS e JavaScript que fazem parte do componente dentro de um ficheiro .vue.
+
+API Styles
+    Options: definimos uma lógica do componente utilizando um objeto de opções As propriedades definidas pelas opções são expostas no this dentro das funções, que apontam para a instância do componente.
+
+    Composition: definimos a lógica do componente utilizando funções da API importadas. A API de Composição é normalmente utilizada com <script setup>. O atributo setup é uma dica que faz a Vue realizar transformações em tempo de compilação que permite-nos utilizar a API de Composição com menos "boilerplate".
+
+    Comparação: https://pt.vuejs.org/guide/extras/composition-api-faq.html
+
+Recumendação de setup para desenvolvimento:
+Visual Studio Code + Volar
+
+Ferramental: https://pt.vuejs.org/guide/scaling-up/tooling.html
+Vite: https://pt.vitejs.dev/
+
+Comandos Single-Page Aplication (Vite) que permite Single-File Component:
+    npm init vue@latest
+    cd [Name Project]
+    npm install
+    npm run dev
+
+
+Estados reativo em SFC:
+    Nós podemos declarar estado reativo utilizando a opção de componente data, que deve ser uma função que retorna um objeto:
+
+
+Mustaches:
+    Identificadores: {{  }} - Permite acessar informações do Script no HTML ou CSS, ou executar funções ({{ message.reverse() }})
+
+
+Estrutura SFC:
+<script></script>
+<template></template>
+<style></style>
+
+Diretivas (https://pt.vuejs.org/guide/essentials/template-syntax.html):
+    Préfixo da Diretiva: v-
+    Similar as interpolações de texto, os valores de diretiva são expressões de JavaScript que têm acesso ao estado do componente.
+
+Attributes Bindings:
+    Bind/vincular atributos: v-bind:nameAtributeHTML=""
+    Bind/vincular atributos resumido: :nameAtributeHTML=""
+ 
+Event Listernes (https://pt.vuejs.org/guide/essentials/event-handling.html):
+    click: v-on:click="nameFunction" - 
+
+Form Bindings (https://pt.vuejs.org/guide/essentials/forms.html):
+    Vincular input: v-model="nameDataScript" - sincroniza automaticamente o valor do <input> com o estado vinculado, assim já não precisamos utilizar um manipulador de evento para isto.
+
+Conditional Rendering
+    Se: v-if="valor" - Deixa ele se o valor for verdadeiro e retira se for falso
+    Senão se: v-else-if="valor" - Deixa ele se o valor for verdadeiro e retira se for falso
+    Senão: v-else - Aparece se if acim correspondente a ele for falso
+
+List Rendering (https://pt.vuejs.org/guide/essentials/list.html)
+    Repetição: 
+        v-for="item in items" :key="item.id"
+            {{ todo.text }}
+
