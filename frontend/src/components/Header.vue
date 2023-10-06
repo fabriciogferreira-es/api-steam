@@ -6,26 +6,31 @@
   >
     <div class="col-md-3 mb-2 mb-md-0 ms-3">
       <router-link
-      class="d-inline-flex link-body-emphasis text-decoration-none"
+        class="d-inline-flex link-body-emphasis text-decoration-none"
         to="/"
       >
-      <img src="src/assets/image/favicon-32x32.png" alt="Logo">
+        <img src="src/assets/image/favicon-32x32.png" alt="Logo" />
       </router-link>
     </div>
 
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
       <li>
-        <router-link
-        class="nav-link px-2 link-secondary"
-        to="/"
-      >
-        Home
-      </router-link>
+        <router-link class="nav-link px-2 link-secondary" to="/">
+          Home
+        </router-link>
       </li>
-      <li><a href="#" class="nav-link px-2">Features</a></li>
-      <li><a href="#" class="nav-link px-2">Pricing</a></li>
+      <li>
+        <router-link class="nav-link px-2 link-secondary" to="/Game">
+          Game
+        </router-link>
+      </li>
+      <li>
+        <router-link class="nav-link px-2 link-secondary" to="/Tester">
+          Comprar
+        </router-link>
+      </li>
       <li><a href="#" class="nav-link px-2">FAQs</a></li>
-      <li><a href="#" class="nav-link px-2">About</a></li>
+      <li><a href="#" class="nav-link px-2">Sobre</a></li>
     </ul>
 
     <div class="col-md-3 text-end">

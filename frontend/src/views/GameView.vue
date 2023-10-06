@@ -1,12 +1,15 @@
 <script>
 import FooterView from "../components/Footer.vue";
 import HeaderView from "../components/Header.vue";
+import NotWorkingView from "../components/NotWorking.vue";
+import api from "../services/api/index";
 import { useGamesStore } from "../stores/games";
 
 export default {
   components: {
     FooterView,
     HeaderView,
+    NotWorkingView,
   },
   setup() {
     const storeGames = useGamesStore();
@@ -29,15 +32,23 @@ export default {
       } else {
         return "bg-black text-white";
       }
+
     },
+    async viewTester(appid) {
+      this.storeGames.game = await api.steam.games.getGame(appid);
+      this.$router.push("/Tester");
+    },
+    
   },
 };
 </script>
 
 <template>
   <HeaderView />
-  <h1 class="text-center m-3">{{ storeGames.game.name }}</h1>
-  <main>
+  <h1 v-if="storeGames.game.length != 0" class="text-center m-3">
+    {{ storeGames.game.name }}
+  </h1>
+  <main v-if="storeGames.game.length != 0">
     <div
       id="carouselExampleIndicators"
       class="carousel slide"
@@ -60,21 +71,19 @@ export default {
           :aria-label="'Slide ' + (screenshot.id + 2)"
         ></button>
       </div>
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img
-            :src="storeGames.game.header_image"
-            class="d-block w-100"
-            alt="..."
-          />
-        </div>
+      <div class="carousel-inner bg-dark">
+        <div
+          class="carousel-item active"
+          :style="
+            'background-image: url(' + storeGames.game.header_image + ');'
+          "
+        ></div>
         <div
           v-for="screenshot in storeGames.game.screenshots"
           :key="screenshot.id"
           class="carousel-item"
-        >
-          <img :src="screenshot.path_full" class="d-block w-100" alt="..." />
-        </div>
+          :style="'background-image: url(' + screenshot.path_full + ');'"
+        ></div>
       </div>
       <button
         class="carousel-control-prev"
@@ -133,9 +142,7 @@ export default {
         </span>
       </h2>
 
-      <div
-        class="d-flex flex-wrap justify-content-around"
-      >
+      <div class="d-flex flex-wrap justify-content-around">
         <div class="mx-2 col d-flex">
           <div>
             <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Idiomas</h3>
@@ -159,40 +166,40 @@ export default {
               <li>
                 <strong>Windows</strong>:
                 <i
-                  v-if="storeGames.game.platforms.windows"
-                  class="fa-solid fa-circle-check"
-                  style="color: #00bd0d"
-                ></i>
-                <i
-                  v-else
-                  class="fa-solid fa-circle-xmark"
-                  style="color: #ff0000"
+                  :class="
+                    'fa-solid fa-circle-' +
+                    (storeGames.game.platforms.windows ? 'check' : 'xmark')
+                  "
+                  :style="
+                    'color: #' +
+                    (storeGames.game.platforms.windows ? '00bd0d' : 'ff0000')
+                  "
                 ></i>
               </li>
               <li>
                 <strong>Mac</strong>:
                 <i
-                  v-if="storeGames.game.platforms.mac"
-                  class="fa-solid fa-circle-check"
-                  style="color: #00bd0d"
-                ></i>
-                <i
-                  v-else
-                  class="fa-solid fa-circle-xmark"
-                  style="color: #ff0000"
+                  :class="
+                    'fa-solid fa-circle-' +
+                    (storeGames.game.platforms.mac ? 'check' : 'xmark')
+                  "
+                  :style="
+                    'color: #' +
+                    (storeGames.game.platforms.mac ? '00bd0d' : 'ff0000')
+                  "
                 ></i>
               </li>
               <li>
                 <strong>Linux</strong>:
                 <i
-                  v-if="storeGames.game.platforms.linux"
-                  class="fa-solid fa-circle-check"
-                  style="color: #00bd0d"
-                ></i>
-                <i
-                  v-else
-                  class="fa-solid fa-circle-xmark"
-                  style="color: #ff0000"
+                  :class="
+                    'fa-solid fa-circle-' +
+                    (storeGames.game.platforms.linux ? 'check' : 'xmark')
+                  "
+                  :style="
+                    'color: #' +
+                    (storeGames.game.platforms.linux ? '00bd0d' : 'ff0000')
+                  "
                 ></i>
               </li>
             </ul>
@@ -200,13 +207,24 @@ export default {
         </div>
         <div class="mx-2 col d-flex align-items-start">
           <div>
-            <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">
-              Outros
-            </h3>
+            <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Outros</h3>
             <ul>
-              <li><strong>Desenvolvedores</strong>: {{ storeGames.game.developers }}</li>
-              <li><strong>Data de lançamento</strong>: {{ storeGames.game.release_date.date }}</li>
-              <li><strong>Suporte</strong>: {{ storeGames.game.support_info.email }}</li>
+              <li>
+                <strong>Desenvolvedores</strong>:
+                <ul>
+                  <li v-for="developer in storeGames.game.developers">
+                    {{ developer }}
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong>Data de lançamento</strong>:
+                {{ storeGames.game.release_date.date }}
+              </li>
+              <li>
+                <strong>Suporte</strong>:
+                {{ storeGames.game.support_info.email }}
+              </li>
             </ul>
           </div>
         </div>
@@ -215,68 +233,53 @@ export default {
 
     <div class="container px-4" id="custom-cards">
       <h2 class="pb-2 border-bottom">Requisitos de Sistemas Operacionais</h2>
-
       <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 p-2">
         <div class="col">
           <div
             class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
             style="
               background-image: url('src/assets/image/operation_system/windows.png');
-              background-size: contain;
-              background-position: center;
-              background-repeat: no-repeat;
             "
           >
-          <div class="d-flex flex-column h-100 p-4 pb-3 text-shadow-1 bg-dark bg-opacity-75">
-              <h3 class="lh-1 fw-bold">
-                Requisitos do Windows
-              </h3>
+            <div
+              class="d-flex flex-column h-100 p-4 pb-3 text-shadow-1 bg-dark bg-opacity-75"
+            >
+              <h3 class="lh-1 fw-bold">Requisitos do Windows</h3>
               <p v-html="storeGames.game.pc_requirements.minimum"></p>
             </div>
           </div>
         </div>
-
-        <div v-if="storeGames.game.mac_requirements.lenght" class="col">
+        <div v-if="storeGames.game.mac_requirements.lenght != undefined" class="col">
           <div
             class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg img-fluid object-fit-cover"
             style="
               background-image: url('src/assets/image/operation_system/apple.svg');
-              background-size: contain;
-              background-position: center;
-              background-repeat: no-repeat;
             "
           >
-          <div class="d-flex flex-column h-100 p-4 pb-3 text-shadow-1 bg-dark bg-opacity-50">
-              <h3 class="lh-1 fw-bold">
-                Requisitos do Mac
-              </h3>
+            <div
+              class="d-flex flex-column h-100 p-4 pb-3 text-shadow-1 bg-dark bg-opacity-50"
+            >
+              <h3 class="lh-1 fw-bold">Requisitos do Mac</h3>
               <ul>
-                <li>
-                  
-                </li>
+                <li></li>
               </ul>
             </div>
           </div>
         </div>
 
-        <div v-if="storeGames.game.linux_requirements.lenght" class="col">
+        <div v-if="storeGames.game.linux_requirements.lenght != null" class="col">
           <div
             class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
             style="
               background-image: url('src/assets/image/operation_system/linux.png');
-              background-size: contain;
-              background-position: center;
-              background-repeat: no-repeat;
             "
           >
-            <div class="d-flex flex-column h-100 p-4 pb-3 text-shadow-1 bg-dark bg-opacity-50">
-              <h3 class="lh-1 fw-bold">
-                Requisitos do Linux
-              </h3>
+            <div
+              class="d-flex flex-column h-100 p-4 pb-3 text-shadow-1 bg-dark bg-opacity-50"
+            >
+              <h3 class="lh-1 fw-bold">Requisitos do Linux</h3>
               <ul>
-                <li>
-                  
-                </li>
+                <li></li>
               </ul>
             </div>
           </div>
@@ -284,7 +287,32 @@ export default {
       </div>
     </div>
   </main>
+  <NotWorkingView
+    v-else
+    message="Desculpe, por algum motivo não encontramos esse jogo!"
+  />
+  <div class="text-center">
+    <button
+      type="button"
+      class="btn btn-sm btn-outline-secondary bg-success text-white"
+      v-on:click="viewTester(storeGames.game.steam_appid)"
+    >
+      <i class="fa-solid fa-dollar-sign"></i>
+      Comprar
+    </button>
+  </div>
   <FooterView />
 </template>
 
-<style></style>
+<style>
+.card,
+.carousel-item {
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.carousel-item {
+  height: 500px;
+}
+</style>
